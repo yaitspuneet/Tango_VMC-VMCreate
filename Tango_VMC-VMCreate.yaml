@@ -1,0 +1,38 @@
+formatVersion: 1
+inputs:
+  size:
+    type: string
+    enum:
+      - Small_2_4
+      - Medium_2_8
+    description: Size of Nodes
+    title: Node Size
+  platform:
+    type: string
+    enum:
+      - 'cloud:vcenter'
+      - 'cloud:aws'
+      - 'cloud:vmc'
+    description: Platform Choice - vCenter/AWS/VMC
+    title: platform
+  image:
+    type: string
+    enum:
+      - Win2016
+    title: Select Image/OS
+resources:
+  Demo-VM:
+    type: Cloud.Machine
+    properties:
+      image: '${input.image}'
+      flavor: '${input.size}'
+      constraints:
+        - tag: '${input.platform}'
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+  Cloud_Network_1:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: 'networktype:web/app'
